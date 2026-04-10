@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: meetavatar
+      POSTGRES_USER: meetavatar
+      POSTGRES_PASSWORD: meetavatar
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - storage:/app/storage
+      - ../third_party/LivePortrait:/app/third_party/LivePortrait
+    environment:
+      MEETAVATAR_DATABASE_URL: postgresql+asyncpg://meetavatar:meetavatar@postgres:5432/meetavatar
+      MEETAVATAR_REDIS_URL: redis://redis:6379
+      MEETAVATAR_STORAGE_DIR: /app/storage
+      MEETAVATAR_LIVEPORTRAIT_DIR: /app/third_party/LivePortrait
+    depends_on:
+      - postgres
+      - redis
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  worker:
+    build: .
+    command: arq app.worker.tasks.WorkerSettings
+    volumes:
+      - .:/app
+      - storage:/app/storage
+      - ../third_party/LivePortrait:/app/third_party/LivePortrait
+    environment:
+      MEETAVATAR_DATABASE_URL: postgresql+asyncpg://meetavatar:meetavatar@postgres:5432/meetavatar
+      MEETAVATAR_REDIS_URL: redis://redis:6379
+      MEETAVATAR_STORAGE_DIR: /app/storage
+      MEETAVATAR_LIVEPORTRAIT_DIR: /app/third_party/LivePortrait
+    depends_on:
+      - postgres
+      - redis
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  pgdata:
+  storage:

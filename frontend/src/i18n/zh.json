@@ -1,0 +1,59 @@
+{
+  "sidebar": {
+    "all_avatars": "所有替身",
+    "my_avatars": "我的替身",
+    "new_avatar": "新建替身",
+    "settings": "设置"
+  },
+  "gallery": {
+    "title": "替身画廊",
+    "welcome_title": "欢迎使用会议替身",
+    "welcome_desc": "创建一个代替你参加会议的数字替身。上传照片，录制驱动视频，让AI为你赋予生命。",
+    "create_first": "创建你的第一个替身"
+  },
+  "detail": {
+    "back": "返回",
+    "join_meeting": "加入会议",
+    "stop_meeting": "停止会议",
+    "retrain": "重新训练",
+    "delete": "删除",
+    "download": "下载用于会议",
+    "status_ready": "就绪",
+    "status_generating": "生成中",
+    "status_error": "错误",
+    "status_draft": "草稿",
+    "confirm_delete": "确定要删除这个替身吗？"
+  },
+  "wizard": {
+    "cancel": "取消",
+    "back": "返回",
+    "next": "下一步",
+    "step1_title": "名称和图标",
+    "step2_title": "驱动视频",
+    "step3_title": "生成",
+    "start_training": "开始生成",
+    "gen_complete": "生成完成！",
+    "name_placeholder": "输入替身名称",
+    "upload_photo": "上传替身图标照片",
+    "drag_drop": "拖拽或点击浏览",
+    "upload_video": "上传驱动视频",
+    "or_record": "或从摄像头录制",
+    "start_record": "开始录制",
+    "stop_record": "停止录制",
+    "confirm_summary": "确认并开始生成"
+  },
+  "settings": {
+    "title": "设置",
+    "theme": "主题",
+    "language": "语言",
+    "device": "设备",
+    "resolution": "分辨率",
+    "fps": "帧率",
+    "loop_method": "循环方式",
+    "blend": "混合帧数",
+    "save": "保存设置",
+    "dark": "深色",
+    "light": "浅色",
+    "saved": "设置已保存！"
+  }
+}

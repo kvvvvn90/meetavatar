@@ -1,0 +1,59 @@
+{
+  "sidebar": {
+    "all_avatars": "All Avatars",
+    "my_avatars": "My Avatars",
+    "new_avatar": "New Avatar",
+    "settings": "Settings"
+  },
+  "gallery": {
+    "title": "Avatar Gallery",
+    "welcome_title": "Welcome to MeetAvatar",
+    "welcome_desc": "Create a digital avatar that attends meetings on your behalf. Upload a photo, record a driving video, and let AI bring it to life.",
+    "create_first": "Create Your First Avatar"
+  },
+  "detail": {
+    "back": "Back",
+    "join_meeting": "Join Meeting",
+    "stop_meeting": "Stop Meeting",
+    "retrain": "Retrain",
+    "delete": "Delete",
+    "download": "Download for Meeting",
+    "status_ready": "Ready",
+    "status_generating": "Generating",
+    "status_error": "Error",
+    "status_draft": "Draft",
+    "confirm_delete": "Are you sure you want to delete this avatar?"
+  },
+  "wizard": {
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "step1_title": "Name & Icon",
+    "step2_title": "Driving Video",
+    "step3_title": "Generate",
+    "start_training": "Start Generation",
+    "gen_complete": "Generation Complete!",
+    "name_placeholder": "Enter avatar name",
+    "upload_photo": "Upload an avatar icon photo",
+    "drag_drop": "Drag & drop or click to browse",
+    "upload_video": "Upload driving video",
+    "or_record": "Or record from webcam",
+    "start_record": "Start Recording",
+    "stop_record": "Stop Recording",
+    "confirm_summary": "Review and start generation"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "device": "Device",
+    "resolution": "Resolution",
+    "fps": "FPS",
+    "loop_method": "Loop Method",
+    "blend": "Blend Frames",
+    "save": "Save Settings",
+    "dark": "Dark",
+    "light": "Light",
+    "saved": "Settings saved!"
+  }
+}

@@ -1,0 +1,47 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Environment / secrets
+.env
+.env.*
+*.local
+
+# Python
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.vite-temp/
+
+# Logs / temp
+*.log
+tmp/
+temp/
+
+# Runtime user data
+backend/storage/**
+!backend/storage/
+!backend/storage/.gitkeep
+!backend/storage/avatars/
+backend/storage/avatars/**
+!backend/storage/avatars/.gitkeep
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Third-party code and assets
+third_party/
