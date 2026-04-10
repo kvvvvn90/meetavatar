@@ -5,7 +5,7 @@ interface VideoRecorderProps {
   onRecordingComplete: (blob: Blob) => void;
 }
 
-const MAX_DURATION = 15; // seconds — forced recording length
+const MAX_DURATION = 15; // seconds - forced recording length
 
 export default function VideoRecorder({
   onRecordingComplete,
@@ -52,7 +52,6 @@ export default function VideoRecorder({
     };
   }, [startCamera, stopCamera]);
 
-  // Re-attach the live stream to the video element whenever we leave preview mode
   useEffect(() => {
     if (!previewUrl && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
@@ -99,19 +98,12 @@ export default function VideoRecorder({
       setElapsed((prev) => {
         const next = prev + 1;
         if (next >= MAX_DURATION) {
-          // Auto-stop at MAX_DURATION
           stopRecording();
         }
         return next;
       });
     }, 1000);
   }, [onRecordingComplete, stopRecording]);
-
-  const formatTime = (s: number) => {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
-  };
 
   return (
     <div className="flex flex-col items-center gap-4">

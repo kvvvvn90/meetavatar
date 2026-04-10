@@ -7,8 +7,8 @@
   },
   "gallery": {
     "title": "替身画廊",
-    "welcome_title": "欢迎使用会议替身",
-    "welcome_desc": "创建一个代替你参加会议的数字替身。上传照片，录制驱动视频，让AI为你赋予生命。",
+    "welcome_title": "欢迎使用 MeetAvatar",
+    "welcome_desc": "创建一个代替你参加会议的数字替身。上传照片，录制驱动视频，让 AI 为它赋予生命。",
     "create_first": "创建你的第一个替身"
   },
   "detail": {
@@ -35,12 +35,12 @@
     "gen_complete": "生成完成！",
     "name_placeholder": "输入替身名称",
     "upload_photo": "上传替身图标照片",
-    "drag_drop": "拖拽或点击浏览",
+    "drag_drop": "拖拽文件到这里，或点击浏览",
     "upload_video": "上传驱动视频",
-    "or_record": "或从摄像头录制",
+    "or_record": "或直接用摄像头录制",
     "start_record": "开始录制",
     "stop_record": "停止录制",
-    "confirm_summary": "确认并开始生成"
+    "confirm_summary": "确认信息并开始生成"
   },
   "settings": {
     "title": "设置",
@@ -54,6 +54,6 @@
     "save": "保存设置",
     "dark": "深色",
     "light": "浅色",
-    "saved": "设置已保存！"
+    "saved": "设置已保存"
   }
 }

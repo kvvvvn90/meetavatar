@@ -21,21 +21,43 @@ const defaultSettings: SettingsState = {
   blendFrames: 15,
 };
 
-function loadSettings(): SettingsState {
+function normalizeLanguage(
+  language: string | null | undefined,
+): SettingsState["language"] {
+  return language === "zh" ? "zh" : "en";
+}
+
+function loadSettings(currentLanguage: string): SettingsState {
   try {
     const saved = localStorage.getItem("meetavatar-settings");
-    if (saved) return { ...defaultSettings, ...JSON.parse(saved) as Partial<SettingsState> };
-  } catch { /* use defaults */ }
-  return defaultSettings;
+    if (saved) {
+      const parsed = JSON.parse(saved) as Partial<SettingsState>;
+      const merged: SettingsState = {
+        ...defaultSettings,
+        ...parsed,
+        language: normalizeLanguage(parsed.language ?? currentLanguage),
+      };
+      return merged;
+    }
+  } catch {
+    // Fall back to defaults when localStorage is unavailable or corrupted.
+  }
+
+  return {
+    ...defaultSettings,
+    language: normalizeLanguage(currentLanguage),
+  };
 }
 
 const selectClass =
   "w-full rounded-lg border border-[#45475a] bg-[#313244] px-4 py-2.5 text-sm text-[#cdd6f4] outline-none transition-colors focus:border-[#89b4fa]";
-const labelClass = "block text-sm font-medium text-[#a6adc8] mb-1.5";
+const labelClass = "mb-1.5 block text-sm font-medium text-[#a6adc8]";
 
 export default function SettingsPage() {
   const { t, i18n } = useTranslation();
-  const [settings, setSettings] = useState<SettingsState>(loadSettings);
+  const [settings, setSettings] = useState<SettingsState>(() =>
+    loadSettings(i18n.resolvedLanguage ?? i18n.language),
+  );
   const [saved, setSaved] = useState(false);
 
   const update = <K extends keyof SettingsState>(
@@ -46,10 +68,14 @@ export default function SettingsPage() {
     setSaved(false);
   };
 
+  const handleLanguageChange = (language: SettingsState["language"]) => {
+    update("language", language);
+    void i18n.changeLanguage(language);
+  };
+
   const handleSave = () => {
     localStorage.setItem("meetavatar-settings", JSON.stringify(settings));
     localStorage.setItem("meetavatar-lang", settings.language);
-    void i18n.changeLanguage(settings.language);
 
     if (settings.theme === "dark") {
       document.documentElement.classList.add("dark");
@@ -66,7 +92,6 @@ export default function SettingsPage() {
       <h1 className="mb-8 text-2xl font-semibold">{t("settings.title")}</h1>
 
       <div className="space-y-6">
-        {/* Theme */}
         <div>
           <label className={labelClass}>{t("settings.theme")}</label>
           <select
@@ -79,12 +104,13 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        {/* Language */}
         <div>
           <label className={labelClass}>{t("settings.language")}</label>
           <select
             value={settings.language}
-            onChange={(e) => update("language", e.target.value as "en" | "zh")}
+            onChange={(e) =>
+              handleLanguageChange(e.target.value as SettingsState["language"])
+            }
             className={selectClass}
           >
             <option value="en">English</option>
@@ -92,7 +118,6 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        {/* Device */}
         <div>
           <label className={labelClass}>{t("settings.device")}</label>
           <select
@@ -105,7 +130,6 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        {/* Resolution */}
         <div>
           <label className={labelClass}>{t("settings.resolution")}</label>
           <select
@@ -119,7 +143,6 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        {/* FPS */}
         <div>
           <label className={labelClass}>{t("settings.fps")}</label>
           <select
@@ -133,7 +156,6 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        {/* Loop Method */}
         <div>
           <label className={labelClass}>{t("settings.loop_method")}</label>
           <select
@@ -148,7 +170,6 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        {/* Blend Frames */}
         <div>
           <label className={labelClass}>{t("settings.blend")}</label>
           <input
