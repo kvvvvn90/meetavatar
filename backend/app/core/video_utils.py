@@ -258,14 +258,14 @@ def composite_face_on_background(
     crop_info: tuple[int, int, int],
     target_height: int = 512,
 ) -> list[np.ndarray]:
-    """Paste 512×512 face frames onto the background at the original face position.
+    """Paste 512×512 face frames onto a background at the original face position.
 
     Creates a feathered (soft-edge) blend so the face merges naturally
     into the background instead of showing a hard square border.
 
     Args:
         face_frames: List of 512×512 face frames from LivePortrait
-        background: Original full-resolution first frame
+        background: Original full-resolution first frame (used for dimensions + crop coords)
         crop_info: (crop_x, crop_y, crop_size) from crop_face_from_video
         target_height: Final video height (default 512)
 

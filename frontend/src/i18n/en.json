@@ -22,7 +22,11 @@
     "status_generating": "Generating",
     "status_error": "Error",
     "status_draft": "Draft",
-    "confirm_delete": "Are you sure you want to delete this avatar?"
+    "confirm_delete": "Are you sure you want to delete this avatar?",
+    "push_to_camera": "Send to Camera",
+    "pushing": "Sending...",
+    "push_success": "Avatar sent to desktop camera client!",
+    "push_error": "Failed to send. Is the desktop app running?"
   },
   "wizard": {
     "cancel": "Cancel",

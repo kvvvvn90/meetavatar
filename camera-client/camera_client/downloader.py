@@ -108,3 +108,46 @@ def download_loop_video(
         bytes_written / (1024 * 1024),
     )
     return dest
+
+
+def download_thumbnail(
+    server_url: str,
+    avatar_id: str,
+    cache_dir: str,
+) -> str:
+    """Download the thumbnail image for an avatar, with caching.
+
+    Returns:
+        Absolute path to the cached thumbnail, or empty string on failure.
+    """
+    safe_id = hashlib.sha256(avatar_id.encode()).hexdigest()[:16]
+    dest = os.path.join(cache_dir, f"{safe_id}_thumb.jpg")
+
+    if os.path.isfile(dest):
+        return dest
+
+    # Try to get avatar details to find thumbnail URL
+    try:
+        url = f"{server_url.rstrip('/')}/api/avatars/{avatar_id}"
+        resp = requests.get(url, timeout=_TIMEOUT)
+        resp.raise_for_status()
+        avatar = resp.json()
+
+        thumb_url = avatar.get("thumbnail_url", "")
+        if not thumb_url:
+            return ""
+
+        # thumbnail_url is relative like /api/files/avatars/.../thumb.jpg
+        full_url = f"{server_url.rstrip('/')}{thumb_url}"
+        resp = requests.get(full_url, timeout=_TIMEOUT)
+        resp.raise_for_status()
+
+        os.makedirs(cache_dir, exist_ok=True)
+        with open(dest, "wb") as f:
+            f.write(resp.content)
+
+        logger.info("Downloaded thumbnail: %s", dest)
+        return dest
+    except Exception as exc:
+        logger.debug("Thumbnail download failed for %s: %s", avatar_id, exc)
+        return ""

@@ -2,17 +2,17 @@
 
 import argparse
 import logging
+import queue
 import sys
 
 from .config import Config
-from .tray import TrayApp
 
 
 def main() -> None:
-    """Parse arguments and launch the tray application."""
+    """Parse arguments and launch the desktop application."""
     parser = argparse.ArgumentParser(
         prog="meetavatar-camera",
-        description="MeetAvatar Camera Client - virtual camera tray app",
+        description="MeetAvatar Camera Client - virtual camera desktop app",
     )
     parser.add_argument(
         "--server-url",
@@ -60,13 +60,34 @@ def main() -> None:
         fps=args.fps,
     )
 
-    app = TrayApp(config)
+    # Message queue for local API → UI communication
+    msg_queue: queue.Queue = queue.Queue()
 
-    try:
-        app.run()
-    except KeyboardInterrupt:
-        logging.info("Interrupted")
-        sys.exit(0)
+    # PyQt6 application
+    from PyQt6.QtWidgets import QApplication
+    from PyQt6.QtCore import Qt
+
+    app = QApplication(sys.argv)
+    app.setApplicationName("MeetAvatar Camera")
+    app.setQuitOnLastWindowClosed(False)  # Keep running in tray
+    app.setStyle("Fusion")
+
+    from .ui.main_window import MainWindow
+    from .local_api import LocalAPI
+
+    window = MainWindow(config, msg_queue)
+
+    # Start local HTTP API in background thread
+    local_api = LocalAPI(
+        msg_queue=msg_queue,
+        status_fn=window.get_status,
+        host=config.local_api_host,
+        port=config.local_api_port,
+    )
+    local_api.start()
+
+    window.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":

@@ -1,27 +1,27 @@
 @echo off
 chcp 65001 >nul
-title MeetAvatar Camera
+title MeetAvatar Camera Client
 
 cd /d "%~dp0..\camera-client"
 
-:: Activate conda env using full path
-call D:\Anaconda3\condabin\conda.bat activate ai-humanizer
+set PYTHON=D:\Anaconda3\envs\ai-humanizer\python.exe
 
-:: Install camera client deps if missing
-python -c "import pystray" 2>nul
+:: Check core deps
+%PYTHON% -c "import PyQt6, aiohttp, cv2, pyvirtualcam" 2>nul
 if %errorlevel% neq 0 (
     echo Installing camera client dependencies...
-    pip install -r requirements.txt --quiet
+    %PYTHON% -m pip install -r requirements.txt --quiet
     echo Done.
     echo.
 )
 
 echo ============================================
 echo   MeetAvatar Camera Client
-echo   Running in system tray...
+echo   Local API: http://localhost:18520
+echo   Use OBS Virtual Camera in Zoom/Teams
 echo ============================================
 echo.
 
-python -m camera_client.main
+%PYTHON% -m camera_client.main --server-url http://localhost:8000
 
 pause

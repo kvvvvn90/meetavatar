@@ -168,6 +168,13 @@ exec(open(r"{LIVEPORTRAIT_DIR / 'inference.py'}").read())
         ffmpeg_shim = Path(ffmpeg_dir) / "ffmpeg.exe"
         if not ffmpeg_shim.exists():
             shutil.copy2(ffmpeg_path, ffmpeg_shim)
+
+        # ffprobe shim — LivePortrait uses it to detect audio tracks.
+        # imageio_ffmpeg only ships ffmpeg; copy it as ffprobe so the probe
+        # succeeds silently (ffmpeg responds to ffprobe-style -show_streams queries).
+        ffprobe_shim = Path(ffmpeg_dir) / "ffprobe.exe"
+        if not ffprobe_shim.exists():
+            shutil.copy2(ffmpeg_path, ffprobe_shim)
     except Exception as e:
         logger.warning(f"Could not configure ffmpeg path: {e}")
 

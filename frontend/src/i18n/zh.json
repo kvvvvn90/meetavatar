@@ -22,7 +22,11 @@
     "status_generating": "生成中",
     "status_error": "错误",
     "status_draft": "草稿",
-    "confirm_delete": "确定要删除这个替身吗？"
+    "confirm_delete": "确定要删除这个替身吗？",
+    "push_to_camera": "推送到摄像头",
+    "pushing": "发送中...",
+    "push_success": "替身已推送到桌面摄像头客户端！",
+    "push_error": "推送失败，请确认桌面客户端正在运行"
   },
   "wizard": {
     "cancel": "取消",

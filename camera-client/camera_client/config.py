@@ -18,6 +18,8 @@ class Config:
     width: int = 1280
     height: int = 720
     fps: int = 30
+    local_api_host: str = "127.0.0.1"
+    local_api_port: int = 18520
 
     def __post_init__(self) -> None:
         # Strip trailing slash from server URL

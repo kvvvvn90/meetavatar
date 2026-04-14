@@ -18,8 +18,9 @@ a = Analysis(
     hiddenimports=[
         "pyvirtualcam",
         "pyvirtualcam._native_windows",
-        "pystray",
-        "pystray._win32",
+        "PyQt6",
+        "PyQt6.sip",
+        "aiohttp",
         "PIL",
         "cv2",
         "numpy",

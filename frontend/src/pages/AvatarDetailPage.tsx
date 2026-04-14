@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getAvatar, type Avatar } from "@/api/avatars";
 import { useAvatars } from "@/hooks/useAvatars";
+import { isDesktopAppRunning, pushAvatarToDesktop } from "@/api/desktopBridge";
 
 const statusStyles: Record<Avatar["status"], string> = {
   ready: "bg-[#a6e3a1] text-[#1e1e2e]",
@@ -19,6 +20,9 @@ export default function AvatarDetailPage() {
 
   const [avatar, setAvatar] = useState<Avatar | null>(null);
   const [loading, setLoading] = useState(true);
+  const [desktopAvailable, setDesktopAvailable] = useState(false);
+  const [pushing, setPushing] = useState(false);
+  const [pushResult, setPushResult] = useState<"success" | "error" | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -29,10 +33,24 @@ export default function AvatarDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    isDesktopAppRunning().then(setDesktopAvailable);
+  }, []);
+
   const handleDelete = async () => {
     if (!id || !confirm(t("detail.confirm_delete"))) return;
     await removeAvatar(id);
     navigate("/");
+  };
+
+  const handlePushToCamera = async () => {
+    if (!id) return;
+    setPushing(true);
+    setPushResult(null);
+    const ok = await pushAvatarToDesktop(id);
+    setPushResult(ok ? "success" : "error");
+    setPushing(false);
+    if (ok) setTimeout(() => setPushResult(null), 3000);
   };
 
   if (loading) {
@@ -122,6 +140,18 @@ export default function AvatarDetailPage() {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            {desktopAvailable && avatar.status === "ready" && (
+              <button
+                onClick={() => void handlePushToCamera()}
+                disabled={pushing}
+                className="inline-flex items-center gap-2 rounded-lg bg-[#89b4fa] px-5 py-2.5 text-sm font-medium text-[#1e1e2e] transition-colors hover:bg-[#74c7ec] disabled:opacity-50"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+                {pushing ? t("detail.pushing") : t("detail.push_to_camera")}
+              </button>
+            )}
             <button
               onClick={() => void handleDelete()}
               className="inline-flex items-center gap-2 rounded-lg border border-[#f38ba8]/30 px-5 py-2.5 text-sm font-medium text-[#f38ba8] transition-colors hover:bg-[#f38ba8]/10"
@@ -132,6 +162,12 @@ export default function AvatarDetailPage() {
               {t("detail.delete")}
             </button>
           </div>
+          {pushResult === "success" && (
+            <p className="text-sm text-[#a6e3a1]">{t("detail.push_success")}</p>
+          )}
+          {pushResult === "error" && (
+            <p className="text-sm text-[#f38ba8]">{t("detail.push_error")}</p>
+          )}
         </div>
       </div>
     </div>
